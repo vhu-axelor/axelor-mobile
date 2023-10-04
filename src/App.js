@@ -19,6 +19,7 @@
 import React from 'react';
 import {Application} from '@axelor/aos-mobile-core';
 import {StockModule} from '@axelor/aos-mobile-stock';
+import {SalesModule} from '@axelor/aos-mobile-sales';
 import {ManufacturingModule} from '@axelor/aos-mobile-manufacturing';
 import {CrmModule} from '@axelor/aos-mobile-crm';
 import {HelpDeskModule} from '@axelor/aos-mobile-helpdesk';
@@ -31,6 +32,7 @@ const App = () => {
     <Application
       modules={[
         StockModule,
+        SalesModule,
         ManufacturingModule,
         CrmModule,
         HelpDeskModule,
