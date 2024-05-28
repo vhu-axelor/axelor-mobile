@@ -27,6 +27,7 @@ import {
   DropdownGeneralView,
   DropdownOpportunityView,
 } from '../../../organisms';
+import {getClientbyId} from '../../../../features/clientSlice';
 import {searchContactById} from '../../../../features/contactSlice';
 import {fetchPartnerEventById} from '../../../../features/eventSlice';
 
@@ -56,12 +57,12 @@ const ClientDropdownCards = ({additionalDropdowns = []}) => {
         key: 1,
         childrenComp: (
           <DropdownContactView
-            address={client.mainAddress?.fullName}
-            fixedPhone={client.fixedPhone}
-            emailAddress={client.emailAddress?.address}
-            webSite={client.webSite}
-            networkData={{company: client.simpleFullName}}
-          />
+                contact={{...client, address: client.mainAddress}}
+                networkData={{company: client.simpleFullName}}
+                refreshContactInfos={() =>
+                  dispatch(getClientbyId({clientId: client.id}))
+                }
+              />
         ),
       },
       {
@@ -104,7 +105,7 @@ const ClientDropdownCards = ({additionalDropdowns = []}) => {
     }
 
     return _dropdownItems;
-  }, [I18n, additionalDropdowns, client, listContactById, listEventPartner]);
+  }, [I18n, additionalDropdowns, client, dispatch, listContactById, listEventPartner]);
 
   return (
     <View style={styles.container}>
