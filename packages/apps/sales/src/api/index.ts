@@ -28,4 +28,7 @@ export {
   fetchSaleOrder as fetchSaleOrderApi,
   fetchSaleOrderById as fetchSaleOrderByIdApi,
 } from './sale-order-api';
-export {fetchSaleOrderLine as fetchSaleOrderLineApi} from './sale-order-line-api';
+export {
+  fetchSaleOrderLine as fetchSaleOrderLineApi,
+  fetchSaleOrderLineById as fetchSaleOrderLineByIdApi,
+} from './sale-order-line-api';

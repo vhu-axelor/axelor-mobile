@@ -151,5 +151,13 @@ export const sale_modelAPI: ObjectFields = {
     exTaxTotal: schemaContructor.number(),
     description: schemaContructor.string(),
     isShowTotal: schemaContructor.boolean(),
+    priceDiscounted: schemaContructor.number(),
+    inTaxPrice: schemaContructor.number(),
+    subTotalCostPrice: schemaContructor.number(),
+    subTotalGrossMargin: schemaContructor.number(),
+    subMarginRate: schemaContructor.number(),
+    subTotalMarkup: schemaContructor.number(),
+    saleSupplySelect: schemaContructor.number(),
+    pricingScaleLogs: schemaContructor.string(),
   }),
 };
