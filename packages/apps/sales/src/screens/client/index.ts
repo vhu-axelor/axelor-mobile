@@ -16,9 +16,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-export {fetchCustomerDelivery} from './customerDeliverySlice';
-export {searchCustomer, searchCustomerCategory} from './customerSlice';
-export {searchProduct} from './productSlice';
-export {fetchSaleConfig} from './saleConfigSlice';
-export {fetchSaleOrderLine} from './saleOrderLineSlice';
-export {fetchSaleOrder, fetchSaleOrderById} from './saleOrderSlice';
+import ClientListScreen from './ClientListScreen';
+
+export default {
+  ClientListScreen: {
+    title: 'Sales_Clients',
+    component: ClientListScreen,
+    options: {
+      shadedHeader: false,
+    },
+    isUsableOnShortcut: true,
+  },
+};
+
+export {ClientListScreen};

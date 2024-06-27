@@ -56,11 +56,14 @@
   "Sales_SOLineType_EndOfPack": "End of pack",
   "Sales_UnitPrice": "Unit price",
   "Sales_Unit": "Unit",
+  "Sales_Clients": "Clients",
+  "Sales_Category": "Category",
   "Sales_SliceAction_FetchSaleConfig": "fetch sale config",
   "Sales_SliceAction_FetchSaleOrder": "fetch sale orders",
   "Sales_SliceAction_SearchCustomer": "search customers",
   "Sales_SliceAction_SearchProduct": "search products",
   "Sales_SliceAction_FetchSaleOrderById": "fetch sale order by id",
   "Sales_SliceAction_FetchCustomerDelivery": "fetch customer delivery",
-  "Sales_SliceAction_FetchSaleOrderLine": "fetch sale order lines"
+  "Sales_SliceAction_FetchSaleOrderLine": "fetch sale order lines",
+  "Sales_SliceAction_SearchCustomerCategory": "search customer categories"
 }
