@@ -17,6 +17,7 @@
  */
 
 export {default as ClientActionCard} from './ClientActionCard/ClientActionCard';
+export {default as ClientHeader} from './ClientHeader/ClientHeader';
 export {default as PartnerActionCard} from './PartnerActionCard/PartnerActionCard';
 export {default as SaleOrderDropdownCards} from './SaleOrderDropdownCards/SaleOrderDropdownCards';
 export {default as SaleOrderHeader} from './SaleOrderHeader/SaleOrderHeader';

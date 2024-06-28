@@ -117,6 +117,9 @@ export const sale_modelAPI: ObjectFields = {
     mobilePhone: schemaContructor.string(),
     fixedPhone: schemaContructor.string(),
     emailAddress: schemaContructor.subObject('address'),
+    description: schemaContructor.string(),
+    factorizedCustomer: schemaContructor.boolean(),
+    hasBlockedAccount: schemaContructor.boolean(),
   }),
   sale_saleOrderLine: schemaContructor.object({
     typeSelect: schemaContructor.number(),

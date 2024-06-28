@@ -17,7 +17,11 @@
  */
 
 export {fetchCustomerDelivery} from './customerDeliverySlice';
-export {searchCustomer, searchCustomerCategory} from './customerSlice';
+export {
+  fetchCustomerById,
+  searchCustomer,
+  searchCustomerCategory,
+} from './customerSlice';
 export {searchProduct} from './productSlice';
 export {fetchSaleConfig} from './saleConfigSlice';
 export {fetchSaleOrderLine} from './saleOrderLineSlice';

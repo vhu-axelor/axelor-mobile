@@ -58,6 +58,9 @@
   "Sales_Unit": "Unit",
   "Sales_Clients": "Clients",
   "Sales_Category": "Category",
+  "Sales_Client": "Client",
+  "Sales_Factorized": "Factorized",
+  "Sales_AccountBlocked": "Account blocked",
   "Sales_SliceAction_FetchSaleConfig": "fetch sale config",
   "Sales_SliceAction_FetchSaleOrder": "fetch sale orders",
   "Sales_SliceAction_SearchCustomer": "search customers",
@@ -65,5 +68,6 @@
   "Sales_SliceAction_FetchSaleOrderById": "fetch sale order by id",
   "Sales_SliceAction_FetchCustomerDelivery": "fetch customer delivery",
   "Sales_SliceAction_FetchSaleOrderLine": "fetch sale order lines",
-  "Sales_SliceAction_SearchCustomerCategory": "search customer categories"
+  "Sales_SliceAction_SearchCustomerCategory": "search customer categories",
+  "Sales_SliceAction_FetchCustomerById": "fetch customer by id"
 }

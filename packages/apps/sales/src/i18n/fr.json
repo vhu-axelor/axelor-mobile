@@ -58,6 +58,9 @@
   "Sales_Unit": "Unité",
   "Sales_Clients": "Clients",
   "Sales_Category": "Catégorie",
+  "Sales_Client": "Client",
+  "Sales_Factorized": "Factorisé",
+  "Sales_AccountBlocked": "Compte bloqué",
   "Sales_SliceAction_FetchSaleConfig": "récupération des configurations de vente",
   "Sales_SliceAction_FetchSaleOrder": "récupération des commandes client",
   "Sales_SliceAction_SearchCustomer": "recherche sur les clients",
@@ -65,5 +68,6 @@
   "Sales_SliceAction_FetchSaleOrderById": "récupération d'une commande client par id",
   "Sales_SliceAction_FetchCustomerDelivery": "récupération d'une livraison client",
   "Sales_SliceAction_FetchSaleOrderLine": "récupération des lignes d'une commande client",
-  "Sales_SliceAction_SearchCustomerCategory": "recherche sur les catégories de client"
+  "Sales_SliceAction_SearchCustomerCategory": "recherche sur les catégories de client",
+  "Sales_SliceAction_FetchCustomerById": "récupération d'un client par id"
 }
