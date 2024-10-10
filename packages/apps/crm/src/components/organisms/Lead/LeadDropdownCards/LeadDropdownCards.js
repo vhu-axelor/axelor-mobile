@@ -59,6 +59,7 @@ const LeadDropdownCards = ({}) => {
                 }
               />
             ),
+            isDefaultVisible: true,
           },
           {
             title: I18n.t('Crm_GeneralInformation'),

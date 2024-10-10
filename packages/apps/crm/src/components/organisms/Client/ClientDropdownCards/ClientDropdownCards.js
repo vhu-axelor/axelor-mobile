@@ -57,13 +57,14 @@ const ClientDropdownCards = ({additionalDropdowns = []}) => {
         key: 1,
         childrenComp: (
           <DropdownContactView
-                contact={{...client, address: client.mainAddress}}
-                networkData={{company: client.simpleFullName}}
-                refreshContactInfos={() =>
-                  dispatch(getClientbyId({clientId: client.id}))
-                }
-              />
+            contact={{...client, address: client.mainAddress}}
+            networkData={{company: client.simpleFullName}}
+            refreshContactInfos={() =>
+              dispatch(getClientbyId({clientId: client.id}))
+            }
+          />
         ),
+        isDefaultVisible: true,
       },
       {
         title: I18n.t('Crm_GeneralInformation'),
@@ -105,7 +106,14 @@ const ClientDropdownCards = ({additionalDropdowns = []}) => {
     }
 
     return _dropdownItems;
-  }, [I18n, additionalDropdowns, client, dispatch, listContactById, listEventPartner]);
+  }, [
+    I18n,
+    additionalDropdowns,
+    client,
+    dispatch,
+    listContactById,
+    listEventPartner,
+  ]);
 
   return (
     <View style={styles.container}>

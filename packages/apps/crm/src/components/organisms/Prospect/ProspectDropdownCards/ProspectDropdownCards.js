@@ -66,6 +66,7 @@ const ProspectDropdownCards = ({}) => {
                 }
               />
             ),
+            isDefaultVisible: true,
           },
           {
             title: I18n.t('Crm_GeneralInformation'),

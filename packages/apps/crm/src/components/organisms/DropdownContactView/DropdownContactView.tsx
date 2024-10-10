@@ -31,9 +31,15 @@ import {
   ContactInfoType,
   SocialNetworksInfoCard,
 } from '../../molecules';
-import {updateEmailApi, updateLeadApi, updatePartnerApi} from '../../../api';
+import {
+  updateAddressApi,
+  updateEmailApi,
+  updateLeadApi,
+  updatePartnerApi,
+} from '../../../api';
 
 interface Contact {
+  id: number;
   address?: any;
   fixedPhone?: string;
   mobilePhone?: string;
@@ -67,11 +73,26 @@ const DropdownContactView = ({
 
   const getState = useCallback(() => ({auth: {userId}}), [userId]);
 
+  const updateAddress = useCallback(
+    ({id, data}) => {
+      const dataApi = {id, partnerId: contact.id, ...data};
+
+      return handlerApiCall({
+        fetchFunction: updateAddressApi,
+        data: dataApi,
+        action: 'Crm_ApiAction_UpdateContactInfo',
+        getState,
+        responseOptions: {showToast: true},
+      });
+    },
+    [contact.id, getState],
+  );
+
   const updateContactInfo = useCallback(
     ({id, version, data}) => {
       const dataApi = {id, version, ...data};
 
-      handlerApiCall({
+      return handlerApiCall({
         fetchFunction: isLead ? updateLeadApi : updatePartnerApi,
         data: isLead ? {lead: dataApi} : dataApi,
         action: 'Crm_ApiAction_UpdateContactInfo',
@@ -84,7 +105,7 @@ const DropdownContactView = ({
 
   const updateEmail = useCallback(
     ({id, version, data}) => {
-      handlerApiCall({
+      return handlerApiCall({
         fetchFunction: updateEmailApi,
         data: {id, version, email: data.email},
         action: 'Crm_ApiAction_UpdateContactInfo',
@@ -114,11 +135,10 @@ const DropdownContactView = ({
     <View>
       <ContactInfoCard
         headerIconName="geo-alt-fill"
-        title={I18n.t('Crm_Adress')}
+        title={I18n.t('Crm_Address')}
         contact={contact}
         contactInfoType={ContactInfoType.type.Address}
         isLead={isLead}
-        rightIconName="pin-map-fill"
         border={
           contact.fixedPhone != null ||
           contact.mobilePhone != null ||
@@ -127,10 +147,8 @@ const DropdownContactView = ({
           !isEmpty(networkData)
         }
         styleBorder={styles.borderInfoCard}
-        rightIconAction={() =>
-          linkingProvider.openMapApp(contact.address.fullName)
-        }
-        onUpdate={() => console.log('Address updated.')}
+        onPress={() => linkingProvider.openMapApp(contact.address.fullName)}
+        onUpdate={updateAddress}
         refreshContactInfos={refreshContactInfos}
       />
       <ContactInfoCard
@@ -139,7 +157,6 @@ const DropdownContactView = ({
         contact={contact}
         contactInfoType={ContactInfoType.type.FixedPhone}
         isLead={isLead}
-        rightIconName="telephone-fill"
         border={
           contact.mobilePhone != null ||
           contact.emailAddress != null ||
@@ -147,7 +164,7 @@ const DropdownContactView = ({
           !isEmpty(networkData)
         }
         styleBorder={styles.borderInfoCard}
-        rightIconAction={() => linkingProvider.openCallApp(contact.fixedPhone)}
+        onPress={() => linkingProvider.openCallApp(contact.fixedPhone)}
         onUpdate={updateContactInfo}
         refreshContactInfos={refreshContactInfos}
       />
@@ -157,14 +174,13 @@ const DropdownContactView = ({
         contact={contact}
         contactInfoType={ContactInfoType.type.MobilePhone}
         isLead={isLead}
-        rightIconName="telephone-fill"
         border={
           contact.emailAddress != null ||
           contact.webSite != null ||
           !isEmpty(networkData)
         }
         styleBorder={styles.borderInfoCard}
-        rightIconAction={() => linkingProvider.openCallApp(contact.mobilePhone)}
+        onPress={() => linkingProvider.openCallApp(contact.mobilePhone)}
         onUpdate={updateContactInfo}
         refreshContactInfos={refreshContactInfos}
       />
@@ -174,10 +190,9 @@ const DropdownContactView = ({
         contact={contact}
         contactInfoType={ContactInfoType.type.Email}
         isLead={isLead}
-        rightIconName="send-fill"
         border={contact.webSite != null || !isEmpty(networkData)}
         styleBorder={styles.borderInfoCard}
-        rightIconAction={() =>
+        onPress={() =>
           linkingProvider.openMailApp(contact.emailAddress?.address)
         }
         onUpdate={updateEmail}
@@ -189,10 +204,9 @@ const DropdownContactView = ({
         contact={contact}
         contactInfoType={ContactInfoType.type.WebSite}
         isLead={isLead}
-        rightIconName="box-arrow-up-right"
         styleBorder={styles.borderInfoCard}
         border={!isEmpty(networkData)}
-        rightIconAction={() => linkingProvider.openBrowser(contact.webSite)}
+        onPress={() => linkingProvider.openBrowser(contact.webSite)}
         onUpdate={updateContactInfo}
         refreshContactInfos={refreshContactInfos}
       />

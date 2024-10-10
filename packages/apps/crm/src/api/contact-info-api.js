@@ -16,7 +16,69 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import {axiosApiProvider, RouterProvider} from '@axelor/aos-mobile-core';
+import {
+  axiosApiProvider,
+  createStandardSearch,
+  RouterProvider,
+} from '@axelor/aos-mobile-core';
+
+async function searchPartnerAddress({partnerId, addressId}) {
+  return createStandardSearch({
+    model: 'com.axelor.apps.base.db.PartnerAddress',
+    criteria: [
+      {
+        fieldName: 'partner.id',
+        operator: '=',
+        value: partnerId,
+      },
+      {
+        fieldName: 'address.id',
+        operator: '=',
+        value: addressId,
+      },
+    ],
+    fieldKey: 'crm_partnerAddress',
+    numberElementsByPage: 1,
+    page: 0,
+  });
+}
+
+export async function updateAddress({
+  id,
+  partnerId,
+  country,
+  city,
+  zip,
+  streetName,
+}) {
+  return axiosApiProvider
+    .post({
+      url: '/ws/aos/address',
+      data: {
+        country,
+        city,
+        zip,
+        streetName,
+      },
+    })
+    .then(async resAddress => {
+      const resPartnerAdress = await searchPartnerAddress({
+        partnerId,
+        addressId: id,
+      });
+
+      return axiosApiProvider.post({
+        url: '/ws/rest/com.axelor.apps.base.db.PartnerAddress',
+        data: {
+          data: {
+            id: resPartnerAdress.data?.data?.[0]?.id,
+            version: resPartnerAdress.data?.data?.[0]?.version,
+            address: {id: resAddress.data?.object?.id},
+          },
+        },
+      });
+    });
+}
 
 export async function updateEmail({id, version, email}) {
   const route = await RouterProvider.get('EmailAddress');
@@ -36,16 +98,18 @@ export async function updateEmail({id, version, email}) {
 export async function updatePartner({
   id,
   version,
+  mainAddress,
   mobilePhone,
   fixedPhone,
   webSite,
 }) {
-  axiosApiProvider.post({
+  return axiosApiProvider.post({
     url: '/ws/rest/com.axelor.apps.base.db.Partner',
     data: {
       data: {
         id,
         version,
+        mainAddress,
         mobilePhone,
         fixedPhone,
         webSite,

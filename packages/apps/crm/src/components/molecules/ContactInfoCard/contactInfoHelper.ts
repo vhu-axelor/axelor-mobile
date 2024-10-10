@@ -34,8 +34,8 @@ class ContactInfoType {
       case this.type.Address:
         return {
           displayText: contact.address?.fullName,
-          id: isLead ? contact.id : contact.address?.id,
-          version: isLead ? contact.version : contact.address?.version,
+          id: contact.address?.id,
+          version: contact.address?.version,
         };
       case this.type.MobilePhone:
         return {

@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useEffect, useMemo} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {Alert} from '@axelor/aos-mobile-ui';
 import {
@@ -29,6 +29,7 @@ import ContactInfoType from './contactInfoHelper';
 
 const FORM_KEY = 'crm_contactInfoEdit';
 const FORM_INPUT_HEIGHT = 62;
+const FORM_INPUT_TITLE_HEIGHT = 68;
 const FORM_BUTTONS_HEIGHT = 70;
 
 interface ContactInfoAlertProps {
@@ -38,7 +39,7 @@ interface ContactInfoAlertProps {
   isLead?: boolean;
   isVisible: boolean;
   setIsVisible: (isVisible: boolean) => void;
-  onUpdate: (args: {id: number; version: number; data: Object}) => void;
+  onUpdate: (args: {id: number; version: number; data: Object}) => Promise<any>;
   refreshContactInfos: () => void;
 }
 
@@ -54,9 +55,17 @@ const ContactInfoAlert = ({
 }: ContactInfoAlertProps) => {
   const I18n = useTranslator();
 
-  const [isEditMode, setIsEditMode] = useState(false);
+  const styles = useMemo(() => {
+    let formContainerHeight = 0;
+    if (contactInfoType === ContactInfoType.type.Address) {
+      formContainerHeight = FORM_INPUT_TITLE_HEIGHT * 3;
+    } else {
+      formContainerHeight = FORM_INPUT_HEIGHT;
+    }
+    formContainerHeight += FORM_BUTTONS_HEIGHT;
 
-  const styles = useMemo(() => getStyles(isEditMode), [isEditMode]);
+    return getStyles(formContainerHeight);
+  }, [contactInfoType]);
 
   const contactInfo = useMemo(
     () => ContactInfoType.getContactInfo(contactInfoType, contact, isLead),
@@ -68,14 +77,18 @@ const ContactInfoAlert = ({
       ...contact,
       email: contact.emailAddress.address,
       formButtons: {
-        onCancelButtonPress: () => setIsEditMode(false),
+        onCancelButtonPress: () => setIsVisible(false),
         onConfirmButtonPress: data => {
-          setIsEditMode(false);
-          onUpdate({id: contactInfo.id, version: contactInfo.version, data});
+          setIsVisible(false);
+          onUpdate({
+            id: contactInfo.id,
+            version: contactInfo.version,
+            data,
+          }).then(() => refreshContactInfos());
         },
       },
     }),
-    [contact, contactInfo, onUpdate],
+    [contact, contactInfo, onUpdate, refreshContactInfos, setIsVisible],
   );
 
   const formKey = useMemo(
@@ -87,8 +100,55 @@ const ContactInfoAlert = ({
     formConfigsProvider.registerForm(
       formKey,
       {
-        readonlyIf: () => !isEditMode,
+        panels: {
+          header: {
+            direction: 'row',
+            colSpan: 12,
+          },
+          headerLeft: {
+            direction: 'column',
+            colSpan: 6,
+            parent: 'header',
+          },
+          headerRight: {
+            direction: 'column',
+            colSpan: 6,
+            parent: 'header',
+          },
+        },
         fields: {
+          streetName: {
+            titleKey: 'Crm_StreetName',
+            type: 'string',
+            widget: 'default',
+            hideIf: () => contactInfoType !== ContactInfoType.type.Address,
+          },
+          city: {
+            titleKey: 'Crm_City',
+            type: 'string',
+            widget: 'default',
+            hideIf: () => contactInfoType !== ContactInfoType.type.Address,
+            parentPanel: 'headerLeft',
+            options: {style: styles.headerLeft},
+          },
+          country: {
+            titleKey: 'Crm_Country',
+            type: 'string',
+            widget: 'default',
+            hideIf: () => contactInfoType !== ContactInfoType.type.Address,
+            parentPanel: 'headerRight',
+            options: {
+              style: styles.headerRight,
+            },
+          },
+          zip: {
+            titleKey: 'Crm_Zip',
+            type: 'string',
+            widget: 'default',
+            hideIf: () => contactInfoType !== ContactInfoType.type.Address,
+            parentPanel: 'headerLeft',
+            options: {style: styles.headerLeft},
+          },
           mobilePhone: {
             type: 'phone',
             widget: 'default',
@@ -113,7 +173,6 @@ const ContactInfoAlert = ({
             type: 'object',
             widget: 'custom',
             customComponent: ContactInfoFormButtons,
-            hideIf: () => !isEditMode,
           },
         },
         modelName: isLead
@@ -122,28 +181,18 @@ const ContactInfoAlert = ({
       },
       {replaceOld: true},
     );
-  }, [formKey, contactInfoType, isEditMode, isLead]);
+  }, [formKey, contactInfoType, isLead, styles.headerLeft, styles.headerRight]);
 
   return (
     <Alert
+      style={styles.alert}
       visible={isVisible}
       title={title}
       cancelButtonConfig={{
         title: null,
         width: 50,
         showInHeader: true,
-        onPress: () => {
-          setIsEditMode(false);
-          setIsVisible(false);
-          refreshContactInfos();
-        },
-      }}
-      confirmButtonConfig={{
-        title: null,
-        iconName: 'pencil-fill',
-        width: 50,
-        hide: isEditMode,
-        onPress: () => setIsEditMode(true),
+        onPress: () => setIsVisible(false),
       }}
       translator={I18n.t}>
       <View style={styles.container}>
@@ -151,20 +200,33 @@ const ContactInfoAlert = ({
           styleScreen={styles.formView}
           defaultValue={defaultValue}
           actions={[]}
+          floatingTools={false}
           formKey={formKey}
         />
       </View>
     </Alert>
   );
 };
-const getStyles = (isEditMode: boolean) =>
+const getStyles = (formContainerHeight: number) =>
   StyleSheet.create({
+    headerLeft: {
+      width: '100%',
+      marginLeft: -5,
+    },
+    headerRight: {
+      width: '100%',
+      height: 2 * FORM_INPUT_TITLE_HEIGHT,
+      marginLeft: 5,
+    },
+    alert: {
+      maxHeight: null,
+    },
     container: {
-      height: FORM_INPUT_HEIGHT + (isEditMode ? FORM_BUTTONS_HEIGHT : 0),
+      height: formContainerHeight,
       marginTop: 15,
     },
     formView: {
-      marginHorizontal: -30,
+      marginHorizontal: -15,
       backgroundColor: null,
     },
   });
